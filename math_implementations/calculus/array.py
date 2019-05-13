@@ -131,12 +131,13 @@ q
             else:
                 return tuple(shape)
 
-    @property
-    def transpose(self):
-        """[M x N] -> [N x M]."""
-        if len(self.shape) > 1:
-            return Array([list(row) for row in zip(*self)])
-        return self
+    # @property
+    # def transpose(self):
+    #     """[M x N] -> [N x M]."""
+    #     # TODO figure out a general algorith for this
+    #     if len(self.shape) > 1:
+    #         return Array([list(row) for row in zip(*self)])
+    #     return self
 
     @staticmethod
     def __array_opp(opp, left, right):
