@@ -27,7 +27,7 @@ class Array(list):
         self.__check_input(data)
         self.data = data
         super().__init__()
-
+q
     def __repr__(self):
         """Match the representation of a list."""
         return str(self.data)

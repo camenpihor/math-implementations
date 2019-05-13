@@ -7,3 +7,9 @@ Implementation of numerical differentiation and integration without the use of N
 ### Differentiation
 
 ### Integration
+
+## Possible Future Projects
+
+- Samplers
+- Gradient Descent
+- Solving y = Wx for W by W = y(X X^T)^-1
