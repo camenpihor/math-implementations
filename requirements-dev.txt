@@ -1,0 +1,7 @@
+black~=19.3b0
+callisto~=0.7
+matplotlib~=3.0
+numpy~=1.16
+pydocstyle~=3.0
+pylint~=2.3
+pytest~=4.5
