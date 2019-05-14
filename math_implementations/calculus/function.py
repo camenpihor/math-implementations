@@ -23,7 +23,7 @@ class Function:
 
         """
         self.fn = function_def
-        self.n_dims = len(signature(self.f).parameters)
+        self.n_dims = len(signature(self.fn).parameters)
 
     def __call__(self, *args):
         """Call function.
@@ -46,7 +46,9 @@ class Function:
     def check_dimensionality(self, args):
         """Ensure that the dimensionality of the input is equal to that of `self.f`."""
         if len(args) != self.n_dims:
-            raise ValueError(f"Invalid number of arguments! Must be {self.n_dims}")
+            raise DimensionMismatchExpcetion(
+                f"Invalid number of arguments! Must be {self.n_dims}"
+            )
 
     def __differentiate(self, x):
         # TODO rework to support multiple dimensions
@@ -105,3 +107,7 @@ class Function:
 
         """
         return Function(self.__integrate_left)
+
+
+class DimensionMismatchExpcetion(Exception):
+    """Raised when the number of arguments don't equal the dimension of the function."""

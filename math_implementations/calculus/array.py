@@ -5,12 +5,9 @@ NumPy is great!
 """
 
 # TODO add docstrings to dunder methods
+# TODO implement mean and standard deviation
 
 import operator
-
-
-class InvalidInputException(Exception):
-    """Raised when input to Array is not of type list."""
 
 
 class Array(list):
@@ -195,3 +192,7 @@ class Array(list):
         # TODO shape must be consistent
         if not isinstance(data, list):
             raise InvalidInputException("Input must be of type list")
+
+
+class InvalidInputException(Exception):
+    """Raised when input to Array is not of type list."""
