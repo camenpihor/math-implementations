@@ -132,6 +132,11 @@ class Array(list):
                 return tuple(shape)
 
     @property
+    def T(self):
+        """Alias of `transpose`."""
+        return self.transpose
+
+    @property
     def transpose(self):
         """Reverse the dimensionality."""
         # TODO figure out a general algorith for this
