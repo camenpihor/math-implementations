@@ -18,6 +18,10 @@ class TestArray(unittest.TestCase):
         for test_case in self.test_cases:
             assert test_case.shape == np.array(test_case).shape
 
+    def test_transpose(self):
+        for test_case in self.test_cases:
+            np.testing.assert_array_equal(test_case.transpose, np.array(test_case).T)
+
     def test_abs(self):
         for test_case in self.test_cases:
             np.testing.assert_array_equal(test_case.abs(), np.abs(test_case))

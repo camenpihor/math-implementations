@@ -131,13 +131,34 @@ class Array(list):
             else:
                 return tuple(shape)
 
-    # @property
-    # def transpose(self):
-    #     """[M x N] -> [N x M]."""
-    #     # TODO figure out a general algorith for this
-    #     if len(self.shape) > 1:
-    #         return Array([list(row) for row in zip(*self)])
-    #     return self
+    @property
+    def transpose(self):
+        """Reverse the dimensionality."""
+        # TODO figure out a general algorith for this
+        shape = self.shape
+        num_dims = len(shape)
+
+        if num_dims == 2:
+            return Array([self[:, i] for i in range(shape[1])])
+
+        if num_dims == 3:
+            return Array(
+                [[self[:, i, j] for i in range(shape[1])] for j in range(shape[2])]
+            )
+        if num_dims == 4:
+            return Array(
+                [
+                    [[self[:, i, j, k] for i in range(shape[1])] for j in range(shape[2])]
+                    for k in range(shape[3])
+                ]
+            )
+
+        if num_dims > 4:
+            raise ValueError(
+                "Transposition for Arrays of more than 4 dimensions is not implemented."
+            )
+
+        return self
 
     @staticmethod
     def __array_opp(opp, left, right):
