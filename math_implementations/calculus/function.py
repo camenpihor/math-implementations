@@ -46,35 +46,23 @@ class Function:
     def check_dimensionality(self, args):
         """Ensure that the dimensionality of the input is equal to that of `self.f`."""
         if len(args) != self.n_dims:
-            raise DimensionMismatchExpcetion(
-                f"Invalid number of arguments! Must be {self.n_dims}"
-            )
+            raise DimensionMismatchExpcetion(f"Invalid number of arguments! Must be {self.n_dims}")
 
-    def __differentiate(self, x):
-        # TODO rework to support multiple dimensions
-        def get_derivative(x):
-            return (self(x + self.e) - self(x - self.e)) / (2 * self.e)
+    def __differentiate(self, data):
+        if not isinstance(data, list):
+            data = [data]
 
-        def is_differentiable(x):
-            """Check if x is differentiable.
+        data = [Array(datum) for datum in data]
+        num_dims = len(data)
 
-            Using the definition:
-                limit from the left as x -> a = the limit from the right as x -> a
-
-            (f(x) - f(x - e)) / e = (f(x + e) - f(x)) / e
-            """
-            return (self(x) * 2 - self(x - self.e) - self(x + self.e)).abs() < 1e-3
-
-        self.check_dimensionality(x)
-
-        differentiability = is_differentiable(x)
-        f_prime = Array(
-            [
-                get_derivative(element) if differentiable else None
-                for element, differentiable in zip(x, differentiability)
+        partials = []
+        for dim_number in range(num_dims):
+            new_data = [
+                data[idx] + self.e if idx == dim_number else data[idx] for idx in range(num_dims)
             ]
-        )
-        return f_prime
+            partials.append((self(*new_data) - self(*data)) / self.e)
+
+        return partials
 
     def __integrate_left(self, x):
         # TODO rework for multiple dimensions
