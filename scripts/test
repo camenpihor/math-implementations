@@ -1,0 +1,20 @@
+#! /bin/bash
+
+set -e # fail on first error
+
+SRC_DIR=${SRC_DIR:-$(pwd)}
+
+echo "Checking documentation..."
+python -m pydocstyle --convention=numpy "${SRC_DIR}"/math_implementations
+echo "Success!"
+
+echo "Checking code style with black..."
+python -m black --line-length 90 --check "${SRC_DIR}"/math_implementations
+echo "Success!"
+
+echo "Checking code style with pylint..."
+python -m pylint "${SRC_DIR}"/math_implementations
+echo "Success!"
+
+echo "Running tests..."
+python -m pytest -vx --cov=math_implementations tests/
