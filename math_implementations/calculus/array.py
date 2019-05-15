@@ -67,6 +67,7 @@ class Array(list):
         return self
 
     def __next__(self):
+        """Get next in iteration, return Array object if next is of type list."""
         if self.index >= self.shape[0]:
             raise StopIteration
         val_at_index = self.data[self.index]
@@ -77,48 +78,65 @@ class Array(list):
         return val_at_index
 
     def __add__(self, other):
+        """Element-wise addition."""
         return self.__array_opp(operator.add, self, other)
 
     def __sub__(self, other):
+        """Element-wise subtraction."""
         return self.__array_opp(operator.sub, self, other)
 
     def __mul__(self, other):
+        """Element-wise multiplication."""
         return self.__array_opp(operator.mul, self, other)
 
     def __truediv__(self, other):
+        """Element-wise division."""
         return self.__array_opp(operator.truediv, self, other)
 
     def __pow__(self, other):
+        """Exponentiate each element by `other`.
+
+        Parameters
+        ----------
+        other : int, float
+        """
         return self.__array_opp(operator.pow, self, other)
 
     def __gt__(self, other):
+        """Element-wise greater than."""
         return self.__array_opp(operator.gt, self, other)
 
     def __lt__(self, other):
+        """Element-wise less than."""
         return self.__array_opp(operator.lt, self, other)
 
     def __ge__(self, other):
+        """Element-wise greater than or equal to."""
         return self.__array_opp(operator.ge, self, other)
 
     def __le__(self, other):
+        """Element-wise less than or equal to."""
         return self.__array_opp(operator.le, self, other)
 
     def __ne__(self, other):
+        """Element-wise not equal to."""
         return self.__array_opp(operator.ne, self, other)
 
     def __eq__(self, other):
+        """Element-wise equal to."""
         return self.__array_opp(operator.eq, self, other)
 
     def __abs__(self):
+        """Element-wise absolute-value."""
         return self.abs()
 
     def abs(self):
-        """Return an Array which each elements is its absolute value."""
+        """Element-wise absolute-value."""
         return Array([abs(idx) for idx in self])
 
     @property
     def shape(self):
-        """Get shape of list."""
+        """Get shape of array."""
         data = self.data
         shape = [len(data)]
         while True:
@@ -129,13 +147,13 @@ class Array(list):
                 return tuple(shape)
 
     @property
-    def T(self):
+    def T(self):  # pylint: disable=invalid-name
         """Alias of `transpose`."""
         return self.transpose
 
     @property
     def transpose(self):
-        """Reverse the dimensionality."""
+        """Reverse the dimensionality of array."""
         # TODO figure out a general algorith for this
         shape = self.shape
         num_dims = len(shape)
@@ -168,17 +186,14 @@ class Array(list):
             return Array([opp(xi, right) for xi in left])
 
         if isinstance(right, list):
-            # TODO rework logic to be more readable
             right = Array(right)
             left_shape = left.shape
             right_shape = right.shape
 
             if left_shape == right_shape:
-                return Array([opp(xi, yi) for xi, yi in zip(left, right)])
+                return Array(list(map(opp, left, right)))
 
-            if (len(left_shape) > (len(right_shape))) and (
-                left_shape[1] == right_shape[0]
-            ):
+            if len(left_shape) > len(right_shape) and left_shape[1] == right_shape[0]:
                 return Array([opp(xi, right) for xi in left])
 
         raise ValueError(
