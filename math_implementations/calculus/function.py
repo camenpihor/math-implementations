@@ -46,9 +46,13 @@ class Function:
     def check_dimensionality(self, args):
         """Ensure that the dimensionality of the input is equal to that of `self.f`."""
         if len(args) != self.n_dims:
-            raise DimensionMismatchExpcetion(f"Invalid number of arguments! Must be {self.n_dims}")
+            raise DimensionMismatchExpcetion(
+                f"Invalid number of arguments! Must be {self.n_dims}"
+            )
 
     def __differentiate(self, data):
+        self.check_dimensionality(data)
+
         if not isinstance(data, list):
             data = [data]
 
@@ -58,7 +62,8 @@ class Function:
         partials = []
         for dim_number in range(num_dims):
             new_data = [
-                data[idx] + self.e if idx == dim_number else data[idx] for idx in range(num_dims)
+                data[idx] + self.e if idx == dim_number else data[idx]
+                for idx in range(num_dims)
             ]
             partials.append((self(*new_data) - self(*data)) / self.e)
 
