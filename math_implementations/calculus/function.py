@@ -75,6 +75,7 @@ class Function:
             cum_sum += at_point
         return Array(integral)
 
+    @property
     def differentiate(self):
         """Differentiate function.
 
@@ -86,6 +87,7 @@ class Function:
         """
         return Function(self.__differentiate, self.n_dims)
 
+    @property
     def integrate(self):
         """Integrate function.
 

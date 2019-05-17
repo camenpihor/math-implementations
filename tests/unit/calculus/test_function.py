@@ -25,7 +25,7 @@ class TestArray(unittest.TestCase):
             self.fn(1, 2, 3)  # three arguments instead of the expected 2
 
     def test_differentiate(self):
-        fn_prime = self.fn.differentiate()
+        fn_prime = self.fn.differentiate
         assert isinstance(fn_prime, Function)
 
         x = Array([-10, -5, 0, 5, 10])
