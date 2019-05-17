@@ -9,7 +9,7 @@ python -m pydocstyle --convention=numpy "${SRC_DIR}"/math_implementations
 echo "Success!"
 
 echo "Checking code style with black..."
-python -m black --line-length 90 --check "${SRC_DIR}"/math_implementations
+python -m black --line-length 100 --check "${SRC_DIR}"/math_implementations
 echo "Success!"
 
 echo "Checking code style with pylint..."

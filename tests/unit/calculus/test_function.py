@@ -8,10 +8,7 @@ from math_implementations.calculus.function import DimensionMismatchExpcetion
 
 
 class TestArray(unittest.TestCase):
-    fn = Function(lambda x, y: (x ** 2) + (y ** 2))
-
-    def test_n_dims(self):
-        assert self.fn.n_dims == 2
+    fn = Function(function_def=lambda x, y: (x ** 2) + (y ** 2), num_dims=2)
 
     def test_call_lists(self):
         actual = self.fn([1, 2, 3], [1, 2, 3])
@@ -34,5 +31,5 @@ class TestArray(unittest.TestCase):
         x = Array([-10, -5, 0, 5, 10])
         y = x
         expected = [x * 2, y * 2]
-        actual = fn_prime([x, y])
+        actual = fn_prime(x, y)
         assert_array_almost_equal(expected, actual, decimal=2)

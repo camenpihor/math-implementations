@@ -40,9 +40,7 @@ class Array(list):
 
         if len(keys) > len(shape):
             raise IndexError(
-                "Too many indices. At most {req}, found {found}".format(
-                    req=shape, found=len(keys)
-                )
+                "Too many indices. At most {req}, found {found}".format(req=shape, found=len(keys))
             )
 
         prev_was_slice = False
@@ -162,9 +160,7 @@ class Array(list):
             return Array([self[:, i] for i in range(shape[1])])
 
         if num_dims == 3:
-            return Array(
-                [[self[:, i, j] for i in range(shape[1])] for j in range(shape[2])]
-            )
+            return Array([[self[:, i, j] for i in range(shape[1])] for j in range(shape[2])])
         if num_dims == 4:
             return Array(
                 [

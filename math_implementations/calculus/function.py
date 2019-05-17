@@ -1,6 +1,4 @@
 """Class which implements differentiation and integration."""
-from inspect import signature
-
 from .array import Array
 
 
@@ -12,7 +10,7 @@ class Function:
 
     e = 1e-2
 
-    def __init__(self, function_def):
+    def __init__(self, function_def, num_dims):
         """Wrap functions to aid differeentiation and integration.
 
         Parameters
@@ -23,7 +21,7 @@ class Function:
 
         """
         self.fn = function_def
-        self.n_dims = len(signature(self.fn).parameters)
+        self.n_dims = num_dims
 
     def __call__(self, *args):
         """Call function.
@@ -46,11 +44,10 @@ class Function:
     def check_dimensionality(self, args):
         """Ensure that the dimensionality of the input is equal to that of `self.f`."""
         if len(args) != self.n_dims:
-            raise DimensionMismatchExpcetion(
-                f"Invalid number of arguments! Must be {self.n_dims}"
-            )
+            raise DimensionMismatchExpcetion(f"Invalid number of arguments! Must be {self.n_dims}")
 
-    def __differentiate(self, data):
+    def __differentiate(self, *data):
+        data = list(data)
         self.check_dimensionality(data)
 
         if not isinstance(data, list):
@@ -62,8 +59,7 @@ class Function:
         partials = []
         for dim_number in range(num_dims):
             new_data = [
-                data[idx] + self.e if idx == dim_number else data[idx]
-                for idx in range(num_dims)
+                data[idx] + self.e if idx == dim_number else data[idx] for idx in range(num_dims)
             ]
             partials.append((self(*new_data) - self(*data)) / self.e)
 
@@ -88,7 +84,7 @@ class Function:
             f -> f'(x)
 
         """
-        return Function(self.__differentiate)
+        return Function(self.__differentiate, self.n_dims)
 
     def integrate(self):
         """Integrate function.
@@ -99,7 +95,7 @@ class Function:
             f -> F(x)
 
         """
-        return Function(self.__integrate_left)
+        return Function(self.__integrate_left, self.n_dims)
 
 
 class DimensionMismatchExpcetion(Exception):
