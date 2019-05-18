@@ -47,6 +47,7 @@ class Function:
         result = Array(self.fn(*f_args))
         if result.shape == (1,):
             result = result[0]
+            
         return result
 
     def __differentiate(self, *data):
@@ -77,7 +78,6 @@ class Function:
         integral = []
         current_point = Array([lower_bound] * self.input_dim)
         while current_point[0] < upper_bound:
-            print(current_point)
             at_point = self(*current_point) * self.e
 
             if not isinstance(at_point, list):
@@ -87,6 +87,28 @@ class Function:
 
             integral.append(cum_sum)
             current_point = current_point + self.e
+
+        return integral
+
+    def __integrate_r2_to_r(self, lower_bound, upper_bound):
+        eps = 1e-2
+        lower_bound = lower_bound[0]
+        upper_bound = upper_bound[0]
+
+        cum_sum = 0
+        integral = []
+        current_x = lower_bound
+        current_y = lower_bound
+        while current_x < upper_bound:
+            while current_y < upper_bound:
+                at_point = self(current_x, current_y) * (eps ** 2)
+                cum_sum += at_point
+                integral.append(cum_sum)
+                current_y += eps
+
+            current_y = lower_bound
+            current_x += eps
+
         return integral
 
     @property
@@ -121,4 +143,7 @@ class Function:
             f -> F(x)
 
         """
+        if self.input_dim == 2 and self.output_dims is None:
+            return Function(self.__integrate_r2_to_r, num_inputs=self.input_dim, output_dims=None)
+
         return Function(self.__integrate_left, num_inputs=self.input_dim, output_dims=None)
