@@ -65,12 +65,8 @@ class TestArray(unittest.TestCase):
         assert self.two_two_three[0, 0, 0] == np.array(self.two_two_three)[0, 0, 0]
 
         # Result may be of type list
-        np.testing.assert_array_equal(
-            self.two_three[:, 0], np.array(self.two_three)[:, 0]
-        )
-        np.testing.assert_array_equal(
-            self.two_three[0, :], np.array(self.two_three[0, :])
-        )
+        np.testing.assert_array_equal(self.two_three[:, 0], np.array(self.two_three)[:, 0])
+        np.testing.assert_array_equal(self.two_three[0, :], np.array(self.two_three[0, :]))
         np.testing.assert_array_equal(
             self.two_two_three[:-1, 0, 0], np.array(self.two_two_three[:-1, 0, 0])
         )

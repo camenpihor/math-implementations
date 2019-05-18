@@ -40,7 +40,7 @@ class Function:
         Returns
         -------
         Array
-            Array of dimension `self.dims`
+            Array of dimension `self.input_dim`
 
         """
         f_args = [Array(arg) if isinstance(arg, list) else Array([arg]) for arg in args]
@@ -68,7 +68,8 @@ class Function:
         return partials
 
     def __integrate_left(self, lower_bound, upper_bound):
-        "This doesn't work in the case of integrating f: x^2 + y^2. Think about what to do to get the reimann sum of that thing"
+        # TODO This doesn't work in the case of integrating f: x^2 + y^2. Think about
+        # what to do to get the reimann sum of that thing
         lower_bound = lower_bound[0]
         upper_bound = upper_bound[0]
 
@@ -121,7 +122,3 @@ class Function:
 
         """
         return Function(self.__integrate_left, num_inputs=self.input_dim, output_dims=None)
-
-
-class DimensionMismatchExpcetion(Exception):
-    """Raised when the number of arguments don't equal the dimension of the function."""

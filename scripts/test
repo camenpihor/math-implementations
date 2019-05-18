@@ -17,4 +17,4 @@ python -m pylint "${SRC_DIR}"/math_implementations
 echo "Success!"
 
 echo "Running tests..."
-python -m pytest -vx --cov=math_implementations tests/
+python -m pytest -vx --cov=math_implementations math_implementations/tests/
