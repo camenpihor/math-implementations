@@ -39,7 +39,7 @@ class TestArray(unittest.TestCase):
 
         bounds = [0, 2]
         expected = 10.66667
-        actual = F(*bounds)[-1]
+        actual = F(*bounds)
         assert_almost_equal(actual, expected, decimal=0)  # takes too long to be good :/
 
     def test_integrate_partial_derivatives(self):
@@ -47,5 +47,5 @@ class TestArray(unittest.TestCase):
         bounds = [0, 2]
 
         expected = self.fn(2, 2)
-        actual = f_star(*bounds)[-1]
+        actual = f_star(*bounds)
         assert_almost_equal(actual, expected, decimal=2)

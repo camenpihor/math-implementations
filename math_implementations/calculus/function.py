@@ -47,7 +47,7 @@ class Function:
         result = Array(self.fn(*f_args))
         if result.shape == (1,):
             result = result[0]
-            
+
         return result
 
     def __differentiate(self, *data):
@@ -57,25 +57,22 @@ class Function:
             data = [data]
 
         data = [Array(datum) for datum in data]
-        num_dims = len(data)
 
         partials = []
-        for dim_number in range(num_dims):
+        for dim_number in range(self.input_dim):
             new_data = [
-                data[idx] + self.e if idx == dim_number else data[idx] for idx in range(num_dims)
+                data[idx] + self.e if idx == dim_number else data[idx]
+                for idx in range(self.input_dim)
             ]
             partials.append((self(*new_data) - self(*data)) / self.e)
 
         return partials
 
     def __integrate_left(self, lower_bound, upper_bound):
-        # TODO This doesn't work in the case of integrating f: x^2 + y^2. Think about
-        # what to do to get the reimann sum of that thing
         lower_bound = lower_bound[0]
         upper_bound = upper_bound[0]
 
         cum_sum = 0
-        integral = []
         current_point = Array([lower_bound] * self.input_dim)
         while current_point[0] < upper_bound:
             at_point = self(*current_point) * self.e
@@ -85,10 +82,9 @@ class Function:
             else:
                 cum_sum += sum(at_point)
 
-            integral.append(cum_sum)
             current_point = current_point + self.e
 
-        return integral
+        return [cum_sum]
 
     def __integrate_r2_to_r(self, lower_bound, upper_bound):
         eps = 1e-2
@@ -96,20 +92,18 @@ class Function:
         upper_bound = upper_bound[0]
 
         cum_sum = 0
-        integral = []
         current_x = lower_bound
         current_y = lower_bound
         while current_x < upper_bound:
             while current_y < upper_bound:
                 at_point = self(current_x, current_y) * (eps ** 2)
                 cum_sum += at_point
-                integral.append(cum_sum)
                 current_y += eps
 
             current_y = lower_bound
             current_x += eps
 
-        return integral
+        return [cum_sum]
 
     @property
     def differentiate(self):
