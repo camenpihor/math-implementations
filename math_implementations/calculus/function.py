@@ -69,6 +69,11 @@ class Function:
         return partials
 
     def __integrate_left(self, lower_bound, upper_bound):
+        """Integrate function from R^N -> R, where N does not equal 2.
+
+        This integrates f over the hypercube defined by [`lower_bound`, `upper_bound`]^N. This
+        function is also used to integrate gradients.
+        """
         lower_bound = lower_bound[0]
         upper_bound = upper_bound[0]
 
@@ -87,6 +92,7 @@ class Function:
         return [cum_sum]
 
     def __integrate_r2_to_r(self, lower_bound, upper_bound):
+        """Integrate a function from R^2 -> R, over a cube."""
         eps = 1e-2
         lower_bound = lower_bound[0]
         upper_bound = upper_bound[0]
