@@ -10,6 +10,7 @@ Implementation of numerical differentiation and integration without the use of N
 
 ## Possible Future Projects
 
-- Samplers
+- Samplers (metropolic hastings, gibbs, slice, HMC)
 - Gradient Descent
-- Solving y = Wx for W by W = y(X X^T)^-1
+- Linear Regression with Gradient Descent
+- Linear Regression with Moore-Penrose Inverse
