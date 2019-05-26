@@ -31,7 +31,7 @@ class Function:
 
     def __repr__(self):
         """Human-readable representation of Function."""
-        input_dimension = f"R^{self.input_dim}"
+        input_dimension = f"R^{self.input_dim}" if self.input_dim > 1 else "R"
         output_dimension = None
 
         if self.output_dims is None:
