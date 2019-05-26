@@ -29,6 +29,20 @@ class Function:
         self.input_dim = num_inputs
         self.output_dims = output_dims
 
+    def __repr__(self):
+        """Human-readable representation of Function."""
+        input_dimension = f"R^{self.input_dim}"
+        output_dimension = None
+
+        if self.output_dims is None:
+            output_dimension = "R"
+        elif len(self.output_dims) == 1:
+            output_dimension = f"R^{self.output_dims[0]}"
+        else:
+            output_dimension = f"R^{self.output_dims}"
+
+        return f"f: {input_dimension} --> {output_dimension}"
+
     def __call__(self, *args):
         """Call function.
 
