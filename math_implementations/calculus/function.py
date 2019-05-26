@@ -57,20 +57,10 @@ class Function:
             Array of dimension `self.input_dim`
 
         """
-        f_args = [Array(arg) if isinstance(arg, list) else Array([arg]) for arg in args]
-        result = Array(self.fn(*f_args))
-        if result.shape == (1,):
-            result = result[0]
-
-        return result
+        return self.fn(*args)
 
     def __differentiate(self, *data):
-        data = list(data)
-
-        if not isinstance(data, list):
-            data = [data]
-
-        data = [Array(datum) for datum in data]
+        data = Array(list(data))
 
         partials = []
         for dim_number in range(self.input_dim):
@@ -80,19 +70,18 @@ class Function:
             ]
             partials.append((self(*new_data) - self(*data)) / self.e)
 
-        return partials
+        return Array(partials)
 
     def __integrate_left(self, lower_bound, upper_bound):
-        """Integrate function from R^N -> R, where N does not equal 2.
+        """Integrate a function.
 
-        This integrates f over the hypercube defined by [`lower_bound`, `upper_bound`]^N. This
-        function is also used to integrate gradients.
+        Integrates functions from R -> R, where N does not equal 2, or the gradient of a
+        function from R^N -> R.
+
+        This integrates f over the hypercube defined by [`lower_bound`, `upper_bound`]^N.
         """
-        lower_bound = lower_bound[0]
-        upper_bound = upper_bound[0]
-
         cum_sum = 0
-        current_point = Array([lower_bound] * self.input_dim)
+        current_point = Array([lower_bound] * self.input_dim)  # Start at the bottom left
         while current_point[0] < upper_bound:
             at_point = self(*current_point) * self.e
 
@@ -103,13 +92,11 @@ class Function:
 
             current_point = current_point + self.e
 
-        return [cum_sum]
+        return cum_sum
 
     def __integrate_r2_to_r(self, lower_bound, upper_bound):
         """Integrate a function from R^2 -> R, over a cube."""
         eps = 1e-2
-        lower_bound = lower_bound[0]
-        upper_bound = upper_bound[0]
 
         cum_sum = 0
         current_x = lower_bound
@@ -123,7 +110,7 @@ class Function:
             current_y = lower_bound
             current_x += eps
 
-        return [cum_sum]
+        return cum_sum
 
     @property
     def differentiate(self):
@@ -159,5 +146,10 @@ class Function:
         """
         if self.input_dim == 2 and self.output_dims is None:
             return Function(self.__integrate_r2_to_r, num_inputs=self.input_dim, output_dims=None)
+
+        elif self.input_dim > 2 and self.output_dims is None:
+            raise ValueError(
+                "R^N -> R integration where N > 2 is not implemented, because it's too slow"
+            )
 
         return Function(self.__integrate_left, num_inputs=self.input_dim, output_dims=None)

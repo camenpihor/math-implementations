@@ -22,6 +22,9 @@ class Array(list):
 
         """
         self.__check_input(data)
+        if isinstance(data, list):
+            if isinstance(data[0], list):
+                data = list(map(list, data))  # avoid Array(Array())
         self.data = data
         super().__init__()
 
