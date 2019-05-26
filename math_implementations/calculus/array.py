@@ -27,7 +27,7 @@ class Array(list):
 
     def __repr__(self):
         """Match the representation of a list."""
-        return str(self.data)
+        return f"Array({str(self.data)})"
 
     def __len__(self):
         """Match the implementation of list."""
