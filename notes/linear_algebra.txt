@@ -1,0 +1,201 @@
+Linear Algebra
+
+- def column space (C): the basis of the column vectors (number of independent columns)
+- def row space (R): the basis of the row vectors (number of independent rows)
+- the dimensionality of the column space is the space as the dimensionality of the
+row space (ie the number of indepedent columns is the same as the number of
+independent rows)
+- A = CR
+
+Special matrices
+    - orthogonal matrix is a matrix where QQ^T = Q^TQ = I
+        - whose columns and rows are perpindicular
+        - Q^T = Q^-1
+        - Q is square
+        - the length of any vector times Q is the same length which is cool for
+          computation because there will be no overflow
+        - Multiplying by an orthonormal matrix is the same thing as rotating
+            - AQ = A with some rotation
+    - orthonormal matrix is an orthogonal matrix where to column vectors are unit
+      vectors
+    - symmetric matrix is matrix where S = S^T
+        - multiplying by a symmetric matrix is the same thing as stretching the
+          matrix in the same direction
+            - AS = A where the vectos are each a bit longer, but point in the
+              same direction
+    - matrix B is similar to matrix A iff B = M^-1 * A * M
+        - similar matrices have the same eigenvalues
+    - positive definite matrices are symmetric matrices that have positive
+      eigenvalues
+
+- Factorization of matrices
+    - A = LU (lower reduced) * (upper reduced)
+    - A = QR (orthonormal matrix) * (row space)
+    - S = QLambdaQ^T (eigen vector/orthonormal)(diagonal matric of eigen values)(eigen
+      vector^T)
+    - A = USigmaV^T
+
+- Four fundamental spaces for n x m matrix A with rank R
+    - column space C(A) (dim = r)
+    - row space C(A^T) (dim = r)
+    - null space of the columns N(A) (dim = n - r) orthogonal to row space
+    - null space of the row N(A^T) (dim = m - r) orthogonal to column space
+
+- A is a vector. ||A|| = A^T dot A
+
+- Some important orgonal matrices
+    - 2x2 rotation matrix
+    - 2x2 reflection matrix
+    - Householder reflection matrices (symmetric orthogonal matrices)
+        - start with u^Tu = 1 (unit vector)
+        - H = I - 2uu^T
+            - check orthogonality
+                - HH^T = I
+                - (I - 2uu^T)^2 = I^2 - 4uu^T + 4uu^Tuu^T
+                - I - 4 + 4 = I, since uu^T = 1
+    - Hadamard matrices
+        - matrix of 1s and -1s
+        - conjecture: every matrix NxN where N / 4 is a whole number has an
+          orthogonal matrix of 1s and -1s (we have tried this for matrices up to
+          N = 668)
+    - the eigen vectors of a symmetric or an orthogonal matrix are orthogonal
+
+Eigenvectors and Eigenvalues
+    - n x n matrix A (square)
+    - there will be n vectors (x) -- the eigenvectors!! --  such that Ax = lambda * x (some matrices don't
+      have enough eigenvectors, but most do) -- where lambda are the
+      eigenvalues
+        - The result of Ax will point in the same direction as x and then we
+          multiply by some constant lambda (eigenvalue) to get that result
+    - these are cool because if we know an eigenvector and its eigenvalue for A
+      then:
+          - A^2x = A(Ax) = A(lambda*x) = lambda(Ax) = lambda^2x
+          - the n-th power of A has the same eigenvector!
+          - A^Nx = lambda^N * x
+          AND
+          - A^-1x = (1 / lambda) * x
+    - these are USEFUL because
+        - any Nx1 vector V = c1x1 + ... + cnxn where c are constants and
+          x are eigenvalues
+        - For any vector v we can define its basis as the eigenvalues (the
+          linear combination of the eigenvalues can produce any element in v)
+        - and so we have that vector v, we can express A^k * v as a
+          linear combination (c1 * lambda1^k * x1) + .. + (cn * lambdan^k * xn)
+          which is amazing for computation
+    - to compute eigenvalues one can use the idea of similar matrics (two
+      matrices -- B and A -- are similar iff B = M^-1 * A * M and similar matrices
+      have the same eigenvalues).
+        - Start with A
+        - Choose an M such that it makes the off-diagonal elements smaller
+        - Compute M^-1 * A * M
+        - Repeat
+        - Once you have a diagonal matrix, the elements of the diagonal are the
+          eigenvalues!
+    - For any matrices X and Y, XY has the same eigenvalues as YX
+        - similar matrices have the same eigenvalues
+        - Want some M such that M^-1 * X * Y * M = YX
+        - M = Y
+        - YX = YX
+        - THIS ISN'T TRUE FOR ADDITION OR OTHER OPERATIONS
+    - the matrix of eigenvalues are called capital lambda (diagonal matrix with
+      eigenvalues as the diagonal)
+    - A = matrix of eigenvectors * capital lambda * matrix of eigenvectors^-1
+        - for any matrix A, the matrix of its eigenvalues (capital lambda) is
+          similar to it. M^-1 * A * M = capital lambda
+        - specifically, the M is the matrix of its eigenvalues (X)
+        - X^-1 * A * X = capital lambda
+        - A = X * capital lambda * X^-1
+
+Real Symmetric Matrices
+    - the eigenvectors are orthogonal
+    - the eigenvalues are real
+    - S = Q * capital lambda Q^T
+        - A = X * capital lambda * X^-1, where X is the matrix of eigenvectors
+        - for symmetric matrices X is orthogonal, so X = Q
+        - S = Q * capital lambda * Q^-1
+        - let's make Q orthonormal
+        - for orthonormal matrices Q^-T = Q^-1
+        - S = Q * capital lambda * Q^T
+
+Positive Definite Matrices
+    - Mut pass one of these tests:
+        - positive eigenvalues
+        - all leading determent > 0 (since the product of the eigenvalues = the
+          determinant)
+        - all pivots in elimination > 0 (there is a relationship between the
+          determinant and the pivots)
+        - energy (x^T * S * x) > 0 for all x not equal to 0
+            - if this is true then the graph of this is a bowl (convex)  with all positive
+              numbers which is really easy to find the minimum of! So if this is
+              the loss function its easy to do gradient descent
+        - S = A^T * A where all cols in A are independent
+    - if S and T are positive definite, then:
+        - S + T is postive definite (use energy as proof)
+        - S^-1 is positive definite (use positive eigenvalues as proof)
+    - A^T * A is a positive definite matrix (symmetric, square, positive
+      eigenvalues)
+
+Single Value Decomposition
+    - Eigenvectors/values only are a thing with square matrices, because the
+      definition Ax = lambda * x cannot work elsewise
+    - So we have a new factorization!
+    - A is any matrix (square or rectangular)
+        - A = U * capital sigma * V^T
+            - U is the left singular vector, V is the right singular vector and
+              capital sigma are the singular values
+    - A * V = U * captial sigma : V and U are orthogonal matrices. capital sigma
+      is a diagonal matrix of the singular values
+        - an orthogonal vector V such that when we multiply by A by it, we get
+          another orthongal vector U
+    - What are V and U?
+        - A^T * A is a symmetric positive definite matrix
+        - also, A * V = U * capital sigma
+            - A = U * capital sigma * V^T
+        - A^T * A = A^T * (U * capital sigma * V^T)
+        - A^T * A = (V * capital sigma ^T * U^T) * (U * capital sigma * V^T)
+        - A^T * A = V * (capital sigma ^T * capital sigma) * V^T
+        - V are the eigenvectors of A^T * A
+        - sigma^2 are the eigenvalues of A^T * A
+        - U are the eigenvectors of A * A^T
+    - Saying that ANY matrix multiplication can be factored into Ax = (U *
+      capital sigma * V^T)x is saying that any matric multiplication is the same
+      thing as rotating (V^T * x), then stretching (* capital sigma), then
+      rotating again (* U)
+    - U = V, when A is positive definite, since if A is positive definite then
+      A = Q * capital lambda * Q^T
+    - det(A) = prod(lambda) = prod(sigma)
+        - the determinant equals the eigenvalues multiplied together which also
+          equals the singular values muliplied together (however they are not
+          always the same! (often not, only in the case where A is positive
+          definite are they the same)
+    - we normally sort singular values such that sigma1 >= sigma2 >= sigma3 etc.
+    - So if any matrix can be written A = U * capital sigma * V^T
+        - U and V are orthonormal so they are all the same(?), so the things that
+          does the most work are the first few sigmas.
+        - thus leads us to PCA
+
+PCA
+    - norms
+        - ||cv|| = c * ||v||
+        - ||v + w|| >= ||v|| + ||w|| (triangle inequality)
+        - ||v^2|| = ||v||^2
+    - vector norms
+        - l1 norm = sum of the components
+              = leads to sparsity
+        - l2 norm = (square the components)^(1/2)
+        - l_infinity = max(components)
+        - l_p = (sum(component ^ p))^(1/p)
+            - people do name a l_0 norm, but its not really a norm by our
+              definition. l_0 = number of nonzero terms
+    - matrix norms
+        - l2 norm = sigma1  -- max singular value
+        - frobenius norm = square_root(square(Aij))
+        - nuclear norm = sum(sigma_i)  -- sum the singular values
+    - center the mean (subtract each column vector by its mean)
+    - Covariance matrix
+        - if A is the matrix of observations cov(A) = (A * A^T) / (N - 1)
+        - The N - 1 is because we subtracted the mean first so now the matrix A
+          is A = X_mean + (A - X_mean) and the thing we are taking the
+          covariance of is A - X_mean which incorporates some information
+          already (which is the minus 1)
+
